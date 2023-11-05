@@ -4,7 +4,7 @@ Foodie is a CLI program that generates a list of restaurants and can create food
 
 ## Tools Used
 + Google Maps Platform API
-+ [GMaps Python Client Library]
++ [GMaps Python Client Library](https://github.com/googlemaps/google-maps-services-python)
 
 ## Examples
 ```bash
