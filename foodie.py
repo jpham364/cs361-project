@@ -92,6 +92,45 @@ def keywordMode(keyWordString):
                 
     return keyWordString
 
+def genPlanmode(zipCode): 
+    print("\nYou entered planning mode!")
+
+    numPlaces = None
+    planKeywords = []
+
+    # This double checks for number input 
+    while True: 
+        numPlaces = input("Enter how places you would like to visit (MAX 5): ")
+        if numPlaces.isdigit() == False:
+            continue
+        if (int(numPlaces) <= 5) & (int(numPlaces) > 0):
+            break
+
+    # This loop will ask the user for a keyword for each place
+    for i in range(int(numPlaces)):
+        print("\nPlace " + str(i + 1) + "...")
+        currKeyword = input("What are you feeling? (enter keyword): ")
+        planKeywords.append(currKeyword)
+
+    # For each keyword inputted, it will process a list to be appended to a text file starting from 1-5
+    for i in range(int(numPlaces)):
+        currList = processList(zipCode, planKeywords[i])
+        createPath = "planner/" + str(i+1) + ".txt"
+        currString = ""
+
+        for j in currList["results"]:
+            currString = currString + (j["name"]) + ","
+
+        # https://www.w3schools.com/python/ref_string_rstrip.asp
+        # This is to remove the trailing comma 
+        currString = currString.rstrip(",")
+
+        f = open(createPath, "w")
+        f.write(currString)
+        f.close()
+            
+    
+
 
 
 if __name__ == "__main__":
@@ -120,6 +159,7 @@ if __name__ == "__main__":
 
         # Available commands for now
         print("\nEnter 'k' to enter new keywords to filter results")
+        print("Enter 'p' to generate a plan for the day!")
         print("Enter 'x' to exit program")
 
         # Make this program go indefinitely, but there will be an exit condition for the user
@@ -130,6 +170,9 @@ if __name__ == "__main__":
         if listInput == 'k':
             keywords = "Restaurant"
             keywords = keywordMode(keywords)
+
+        elif listInput == 'p':
+            genPlanmode(zipCode)
 
         # Exit
         elif listInput == 'x':
