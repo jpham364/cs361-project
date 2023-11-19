@@ -123,7 +123,7 @@ def genPlanmode(zipCode):
 
         # https://www.w3schools.com/python/ref_string_rstrip.asp
         # This is to remove the trailing comma 
-        currString = currString.rstrip(",")
+        currString = currString + str(numPlaces)
 
         f = open(createPath, "w")
         f.write(currString)
