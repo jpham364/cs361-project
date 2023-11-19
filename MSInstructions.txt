@@ -1,0 +1,58 @@
+Yo, whats up Zhi, here are my instructions for the microservice:
+
+How it program runs: 
+Basically the format of this program is that the user is going to press 'p'
+to generate a plan for the day. What happens is that the user can pick up to 5
+places to visit.
+
+Example program: (user picked 5)
+    Enter 'k' to enter new keywords to filter results
+    Enter 'p' to generate a plan for the day!
+    Enter 'x' to exit program
+    User Input -- p
+
+    You entered planning mode!
+    Enter how places you would like to visit (MAX 5): 5
+
+After this, the program will loop through the amount of places the user put and ask for a keyword
+Example:
+    Place 1...
+    What are you feeling? (enter keyword): Asian
+
+    Place 2...
+    What are you feeling? (enter keyword): Coffee
+
+    Place 3...
+    What are you feeling? (enter keyword): Steak 
+
+    Place 4...
+    What are you feeling? (enter keyword): American
+
+    Place 5...
+    What are you feeling? (enter keyword): Dinner
+
+This will result in the program creating a list of places inside of the planner folder
+which will have 5 files numbered 1-5.txt respectively for each place the user puts. The format that the list
+will output will be:
+
+    Bill's Steak House Lounge~Clyde's Prime Rib Restaurant and Bar~Acropolis Steakhouse~Chan's Steakery~de Fuego Grille~Sayler's Old Country Kitchen~Original Roadhouse Grill~Applebee's Grill + Bar~Applebee's Grill + Bar~Applebee's Grill + Bar~Stanford's Clackamas~Master Philly Cheesesteak~Laurelhurst Market~Steakadelphia~Celebrities Parkway Grill~River Roadhouse~The Observatory~Bumpers Grill & Bar~Ranch Tavern~Matador East Portland~5
+
+Some explanation to this: 
+    - the separator for these restaurants is ~ 
+    - the last item in this list will include a number, which will be the 
+      amount of items you will be creating a list for 
+
+How the Microservice works:
+So, for this microservice you will parse the file string to separate the restaurant names as well as the number at the end of the text.
+Based on the number at the end of the text, you will randomly create a list of 1-5 restaurants formatted like:
+
+    1. Some restaurant 
+    2. Some restaurant 
+    3. Some restaurant 
+    4. Some restaurant 
+    5. Some restaurant 
+
+Once formatted, you can rewrite the output into their respective files. My original idea for this is that you can create a loop
+that parses each file and creates the random list individually one by one. 
+
+Let me know if you have any questions!

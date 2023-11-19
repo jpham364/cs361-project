@@ -119,7 +119,7 @@ def genPlanmode(zipCode):
         currString = ""
 
         for j in currList["results"]:
-            currString = currString + (j["name"]) + ","
+            currString = currString + (j["name"]) + "~"
 
         # https://www.w3schools.com/python/ref_string_rstrip.asp
         # This is to remove the trailing comma 
