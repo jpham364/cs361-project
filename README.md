@@ -73,14 +73,16 @@ Plan List:
 
 # Microservice for Zhi
 + Uses text file communication to signal microservice and main program to run off of each other
-+ To programmatically REQUEST data from the microservice I made, the main program will write a character's name on a file called char.txt. Example: 
+## Request
+To programmatically REQUEST data from the microservice I made, the main program will write a character's name on a file called char.txt. Example: 
 ```
 charFile = open("char.txt", "w")
         resultFile.write(str(character))
         resultFile.close()
 ```
 My microservice continuously checks for the existence of a char.txt. Once the microservice sees that there is a char.txt inside of the directory. It will read the file and extract the character's name to use inside of the microservice. 
-+ To programmatically RECEIVE data, after my microservice finishes the survey that the user completes. It will create a result.txt with the sum of the answers since the questions uses numbers to answer. The main program will recieve the microservice data by reading the newly created result.txt file. Example:
+## Receive
+To programmatically RECEIVE data, after my microservice finishes the survey that the user completes. It will create a result.txt with the sum of the answers since the questions uses numbers to answer. The main program will recieve the microservice data by reading the newly created result.txt file. Example:
 ```
 resultFile = open("result.txt", "r")
 sum = resultFile.read()
