@@ -7,6 +7,10 @@ import config
 # https://github.com/googlemaps/google-maps-services-python
 import googlemaps
 
+import time
+
+import os
+
 # Conncect with API key 
 gmaps = googlemaps.Client(key=config.apiKey)
 
@@ -118,6 +122,8 @@ def genPlanmode(zipCode):
         createPath = "planner/" + str(i+1) + ".txt"
         currString = ""
 
+        # print(createPath)
+
         for j in currList["results"]:
             currString = currString + (j["name"]) + "~"
 
@@ -125,9 +131,20 @@ def genPlanmode(zipCode):
         # This is to remove the trailing comma 
         currString = currString + str(numPlaces)
 
-        f = open(createPath, "w")
-        f.write(currString)
-        f.close()
+        # For each file in the planner, write the list of locations
+        planner = open(createPath, "w")
+        planner.write(currString)
+        planner.close()
+
+        
+
+    # Once all the places have been written out on the files
+    # You can now 
+    # Then, create a request.txt that is empty 
+    request = open("request.txt", "w")
+    request.write("")
+    request.close()
+    return int(numPlaces)
             
     
 
@@ -172,7 +189,22 @@ if __name__ == "__main__":
             keywords = keywordMode(keywords)
 
         elif listInput == 'p':
-            genPlanmode(zipCode)
+
+            numPlaces = genPlanmode(zipCode)
+
+            time.sleep(4)
+            planResult = open("output.txt", "r")
+            
+            print("Here is your generated plan!\n ")
+            for planI in range(numPlaces):
+
+                header = str(planI + 1) + ". "
+                place = planResult.readline()
+                place = place.rstrip('\n')
+                print(header + place)
+            
+            input("\nPress enter to continue")
+            os.remove("request.txt")
 
         # Exit
         elif listInput == 'x':
