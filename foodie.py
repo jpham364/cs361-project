@@ -6,35 +6,33 @@ import config
 # https://github.com/googlemaps/google-maps-services-python
 import googlemaps
 
+# https://pypi.org/project/colorama/
+from colorama import Fore
+
 import time,os
 
 gmaps = googlemaps.Client(key=config.apiKey)
 
-# This function uses the Google Maps API for Nearby Search function
 # The function will return a JSON object that we can use to extract names of places
 def processList(zipCode, keyword):
  
-    # Geocode function to get the JSON object 
+    # Geocode function to get the JSON object & convert to string
     geocode_result = gmaps.geocode(zipCode)
     lat = geocode_result[0]["geometry"]["location"]["lat"]
     long = geocode_result[0]["geometry"]["location"]["lng"]
     
-    # For the places.nearby() function to work, the location has to be in a string.
     location = str(lat) + "," + str(long)
 
-    # Checks for places nearby within 10km
-    places = gmaps.places_nearby(location, 10000, keyword)
+    places = gmaps.places_nearby(location, 10000, keyword) # 10km radius
     
     return places
   
-# Returns a boolean value false if not a valid zip code
 def zipCodeCheck(zipCode):
     if(len(zipCode) != 5):
         return False
     if(zipCode.isdigit() == False):
         return False
     return True
-
 
 def keywordPrint():
     print("\nYou entered keyword mode! Commands below:")
@@ -43,50 +41,46 @@ def keywordPrint():
     print("'li' to see list of keywords")
     print("'u' to undo your last filter keyword")
 
-# Note: Cannot split else ifs
+# Note: Cannot split else ifs in this function 
 def keywordMode(keyWordString):
     keywordList = []
     keywordPrint()
 
-    # Users can continuously add keywords until exit
     while True:
         keywordInput = input("User Input -- ")
         
-        # When the user exits
-        if keywordInput == 'e':
+        if keywordInput == 'e':     # Exits
 
-            # Convert keywordList into keywordString to be returned 
-            # for the processList() function.
+            # Convert keywordList into keywordString to be returned for the processList() function.
             for keyword in keywordList:
                 keyWordString = keyWordString + ", " + keyword
             print("Exited Keyword mode")
             break
 
-        # When the user undos a keyword
+        # When the user undos a keyword, has error handling if you pop an empty list
         elif keywordInput == 'u':
             
-            # Prevents errors if you pop an empty list
             if len(keywordList) == 0:
                 continue 
             else:
                 keywordList.pop()
 
-        # When the users wants to see the list of current keywords
-        elif keywordInput == 'li':
+        elif keywordInput == 'li':      # List of current keywords
             print(keywordList)
 
         else:
-            keywordList.append(keywordInput) # If no commands are put, everything else is a keyword
+            keywordList.append(keywordInput) # Everything else is a keyword
                 
     return keyWordString
 
+# Check input between 1-5
 def checkNumInput():
     numPlaces = 0
     while True: 
         numPlaces = input("Enter how places you would like to visit (MAX 5): ")
         if numPlaces.isdigit() == False:
             continue
-        if (int(numPlaces) <= 5) & (int(numPlaces) > 0): # between 1-5
+        if (int(numPlaces) <= 5) & (int(numPlaces) > 0): 
             break
     return numPlaces
 
@@ -95,13 +89,14 @@ def keywordCreate(numPlaces, planKeywords):
     for place in range(int(numPlaces)):
         print("\nPlace " + str(place + 1) + "...")
         currKeyword = input("What are you feeling? (enter keyword): ")
+
         currKeyword = "Restaurant," + currKeyword
         planKeywords.append(currKeyword)
     return planKeywords
 
+# Adds list of restaurants in x.txt files inside of planner directory
 def processPlannerFiles(numPlaces, planKeywords, zipCode):
 
-    # Adds list of restaurants in x.txt files inside of planner directory
     for place in range(int(numPlaces)):
         currList = processList(zipCode, planKeywords[place])
         createPath = "planner/" + str(place+1) + ".txt"
@@ -124,7 +119,6 @@ def createRequest():
     request.write("")
     request.close()
 
-
 def genPlanmode(zipCode): 
     print("\nYou entered planning mode!")
 
@@ -133,10 +127,10 @@ def genPlanmode(zipCode):
 
     numPlaces = checkNumInput()
 
-    # Ask the user for a keyword for each place they want to visit
+    # Ask the user for a keyword for each place they want to visit, insert in planKeywords list
     keywordCreate(numPlaces, planKeywords)
 
-    # For each keyword inputted, it will process a list to be appended to a text file starting from 1-5
+    # For each keyword inputted, it will process a list to be appended to a text file starting from 1-5.txt
     processPlannerFiles(numPlaces, planKeywords, zipCode)
 
     createRequest()
@@ -150,13 +144,14 @@ def printPlan(numPlaces):
         place = planResult.readline()
         place = place.rstrip('\n')
         print(header + place)
-            
+
+
 
 
 if __name__ == "__main__":
 
     # https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Type%20Something%20
-    print("""                                      
+    print(Fore.MAGENTA + """                                      
                                                    ,---. 
             ,------.                ,--.,--.       |   | 
             |  .---',---.  ,---.  ,-|  |`--' ,---. |  .' 
@@ -171,22 +166,21 @@ if __name__ == "__main__":
 
     # Check for valid zip code
     while True:
-        zipCode = input("Please enter a zip code: ")
+        zipCode = input(Fore.WHITE + "Please enter a zip code: ")
         zipCheck = zipCodeCheck(zipCode)
         if zipCheck == True:
             break
         else:
             print("Please try again!\n")
     
-    # User input loops indefinitely
+    # User input loops indefinitely, will print restaurant list every loop
     while True:
         print("\nList:")
         
-        # Process and print the list of places found
         currList = processList(zipCode, keywords)
 
         for i in currList["results"]:
-                print(i["name"])
+                print(Fore.WHITE + i["name"])
 
         print("\nEnter 'k' to enter new keywords to filter results")
         print("Enter 'p' to generate a plan for the day!")
@@ -220,9 +214,3 @@ if __name__ == "__main__":
         else:
             print("\nError input! Try again")
             
-
-
-
-
-
-
